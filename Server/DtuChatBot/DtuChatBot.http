@@ -1,0 +1,6 @@
+@DtuChatBot_HostAddress = http://localhost:5220
+
+GET {{DtuChatBot_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
