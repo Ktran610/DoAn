@@ -1,0 +1,107 @@
+/* ----- sidebar ----- */
+.sidebar {
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    &:hover {
+        overflow: auto;
+    }
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        width: 22%;
+        background-color: #f9f9f9;
+        a:hover {
+            background-color: unset;
+        }
+        .logo {
+            width: 100%;
+        }
+    }
+
+    ul {
+        a {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 1.6rem;
+            font-weight: 500;
+            line-height: 1.5;
+            padding: 10px;
+            color: #666;
+            border-radius: 5px;
+        }
+    }
+
+    a:hover {
+        background-color: #ddd;
+        color: #333;
+        transition: 0.5s;
+    }
+
+    .subtitle {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #7f8c8d;
+        padding: 5px 10px 0;
+    }
+
+    .history {
+        margin: 20% 0 40%;
+        li {
+            position: relative;
+        }
+    }
+
+    .account {
+        position: absolute;
+        width: 90%;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: #f9f9f9;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin: 10px 0;
+
+        &:hover {
+            background-color: #ececec;
+        }
+
+        img {
+            width: 50px;
+            border-radius: 50%;
+        }
+
+        span {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #111;
+        }
+    }
+}
+.popup-setting {
+    position: absolute;
+    width: 90%;
+    bottom: 100;
+    bottom: 65px;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+   .bnt-setting{
+        margin-top: 1px;
+        background-color: #8da0b3;
+        height: 42px;
+   }
+   .bnt-gmail-text {
+    text-align: center;
+    color: white;
+    line-height: 38px;
+    border-radius: 4px;
+   }
+}
