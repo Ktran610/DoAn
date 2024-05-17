@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "k6LKStNItHJNKCE8fLhWtzIrkjVEdd1ikdXFeNx9q7k=",
+  "Source": "DtuChatBot",
+  "BasePath": "_content/DtuChatBot",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
