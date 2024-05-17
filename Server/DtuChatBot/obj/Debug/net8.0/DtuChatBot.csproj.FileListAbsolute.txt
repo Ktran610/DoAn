@@ -137,3 +137,4 @@ D:\DoAnTotNghiep\Server\DtuChatBot\obj\Debug\net8.0\refint\DtuChatBot.dll
 D:\DoAnTotNghiep\Server\DtuChatBot\obj\Debug\net8.0\DtuChatBot.pdb
 D:\DoAnTotNghiep\Server\DtuChatBot\obj\Debug\net8.0\DtuChatBot.genruntimeconfig.cache
 D:\DoAnTotNghiep\Server\DtuChatBot\obj\Debug\net8.0\ref\DtuChatBot.dll
+D:\DoAnTotNghiep\Server\DtuChatBot\obj\Debug\net8.0\DtuChatBot.sourcelink.json

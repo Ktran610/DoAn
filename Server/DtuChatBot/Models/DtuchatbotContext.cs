@@ -25,7 +25,7 @@ public partial class DtuchatbotContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-B1DIPGC;Database=dtuchatbot;Trusted_Connection=true;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-B1DIPGC;Database=dtuchatbot;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,8 +38,14 @@ public partial class DtuchatbotContext : DbContext
             entity.Property(e => e.Id)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(70)
+                .IsUnicode(false);
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(15)
                 .IsUnicode(false);
             entity.Property(e => e.UserName)
                 .HasMaxLength(50)
@@ -84,6 +90,7 @@ public partial class DtuchatbotContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.Question).HasColumnType("ntext");
+            entity.Property(e => e.Report).HasMaxLength(255);
 
             entity.HasOne(d => d.Chat).WithMany(p => p.ChatDetails)
                 .HasForeignKey(d => d.ChatId)

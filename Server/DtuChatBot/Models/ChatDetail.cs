@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace DtuChatBot.Models;
 
@@ -16,6 +15,7 @@ public partial class ChatDetail
 
     public string ChatId { get; set; } = null!;
 
-    [JsonIgnore]
+    public string? Report { get; set; }
+
     public virtual Chat Chat { get; set; } = null!;
 }

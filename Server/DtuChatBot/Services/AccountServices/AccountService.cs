@@ -136,6 +136,9 @@ namespace DtuChatBot.Services.AccountServices
                     acc.UserName = request.UserName;
                     acc.PasswordHash = request.PasswordHash;
                     acc.RoleId = request.RoleId;
+                    acc.Age = request.Age;
+                    acc.Email = request.Email;
+                    acc.PhoneNumber = request.PhoneNumber;
 
                     await _context.SaveChangesAsync();
                     response.Data = _mapper.Map<GetAccountDto>(acc);
