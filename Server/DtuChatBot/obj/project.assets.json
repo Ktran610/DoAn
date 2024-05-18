@@ -4651,11 +4651,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\DoAnTotNghiep\\Server\\DtuChatBot\\DtuChatBot.csproj",
+      "projectUniqueName": "F:\\DoAnTotNghiep\\Server\\DtuChatBot\\DtuChatBot.csproj",
       "projectName": "DtuChatBot",
-      "projectPath": "D:\\DoAnTotNghiep\\Server\\DtuChatBot\\DtuChatBot.csproj",
+      "projectPath": "F:\\DoAnTotNghiep\\Server\\DtuChatBot\\DtuChatBot.csproj",
       "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "D:\\DoAnTotNghiep\\Server\\DtuChatBot\\obj\\",
+      "outputPath": "F:\\DoAnTotNghiep\\Server\\DtuChatBot\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",

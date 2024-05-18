@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DtuChatBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+00b2af693677f5a687a7299a5e5a62ad150cce15")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+88626c3aa63708cd23165d0c42580102ebd2e32f")]
 [assembly: System.Reflection.AssemblyProductAttribute("DtuChatBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DtuChatBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

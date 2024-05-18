@@ -7,6 +7,7 @@ import {
 import { Flex, Input } from "antd";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { httpClient } from "../../api";
 
 export default function Chat(props) {
   const { request, onDelete, setChatList } = props;
@@ -15,6 +16,20 @@ export default function Chat(props) {
   const [value, setValue] = useState("");
   const handleEdit = (questionId) => {
     setChatList((prev) => {
+      const updateChatNameRequest = {
+        id: questionId,
+        name: value,
+      };
+      httpClient
+        .post("Chat/UpdateChatName", updateChatNameRequest)
+        .then((result) => {
+          let finalResult = result.data.data;
+          console.log("Data", result.data);
+          console.log("FinalResult", finalResult.message);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       return prev.map((chat) => {
         if (chat.id === questionId) {
           return {

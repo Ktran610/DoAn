@@ -24,10 +24,28 @@ namespace DtuChatBot.Controllers
             return Ok(await _accountService.CreateAccount(newAccount));
         }
 
+        [HttpPost("CreateAdminAccount")]
+        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> CreateAdminAccount(CreateUserModel newAccount)
+        {
+            return Ok(await _accountService.CreateAdminAccount(newAccount));
+        }
+
         [HttpGet("GetAllUserAccount")]
         public async Task<ActionResult<ServiceResponse<GetAccountDto>>> GetAllUserAccount()
         {
             return Ok(await _accountService.GetAllUserAccount());
+        }
+
+        [HttpGet("GetAllAdminAccount")]
+        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> GetAllAdminAccount()
+        {
+            return Ok(await _accountService.GetAllAdminAccount());
+        }
+
+        [HttpGet("GetAllUserAndAdminAccounts")]
+        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> GetAllUserAndAdminAccounts()
+        {
+            return Ok(await _accountService.GetUserAndAdminAccounts());
         }
 
         [HttpPost("Login")]

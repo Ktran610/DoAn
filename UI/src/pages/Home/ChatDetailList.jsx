@@ -23,6 +23,7 @@ function ChatDetailList(props) {
         let finalResult = result.data.data;
         let tempChat = finalResult.map((value) => {
           return {
+            id: value.id,
             question: value.question,
             answer: value.answer,
           };

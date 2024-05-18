@@ -17,6 +17,16 @@ function ChatList(props) {
 
   const handleDelete = (questionId) => {
     setChatList((prev) => prev.filter((chat) => chat.id !== questionId));
+    httpClient
+      .delete("Chat/DeleteChatById?id=" + questionId)
+      .then((result) => {
+        console.log("data", result.data.data);
+        let finalResult = result.data.value;
+        console.log("Finalresult", finalResult);
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
  

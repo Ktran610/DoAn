@@ -3,6 +3,7 @@ using DtuChatBot.Dtos.UserDtos;
 using DtuChatBot.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DtuChatBot.Services.AccountServices
 {
@@ -50,6 +51,46 @@ namespace DtuChatBot.Services.AccountServices
                 return response;
             }
             catch(Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> CreateAdminAccount(CreateUserModel newAccount)
+        {
+            var response = new ServiceResponse<GetAccountDto>();
+            try
+            {
+                var acc = _mapper.Map<Account>(newAccount);
+                acc.RoleId = (int)RoleEnum.Admin;
+                var checkAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.UserName == acc.UserName);
+                if (checkAccount != null)
+                {
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "Đăng ký thất bại, tài khoản đã tồn tại";
+                    return response;
+                }
+                var result = await _context.Accounts.AddAsync(acc);
+                await _context.SaveChangesAsync();
+                if (result != null)
+                {
+                    response.Data = _mapper.Map<GetAccountDto>(acc);
+                    response.Success = true;
+                    response.Message = "Đăng ký thành công, tiếp tục tới trang đăng nhập";
+                }
+                else
+                {
+                    response.Data = null;
+                    response.Success = false;
+                    response.Message = "Đăng ký thất bại, vui lòng thử lại";
+                }
+                return response;
+            }
+            catch (Exception ex)
             {
                 response.Data = null;
                 response.Success = false;
@@ -137,7 +178,6 @@ namespace DtuChatBot.Services.AccountServices
                     acc.PasswordHash = request.PasswordHash;
                     acc.RoleId = request.RoleId;
                     acc.Age = request.Age;
-                    acc.Email = request.Email;
                     acc.PhoneNumber = request.PhoneNumber;
 
                     await _context.SaveChangesAsync();
@@ -168,7 +208,10 @@ namespace DtuChatBot.Services.AccountServices
 
                 if (acc != null)
                 {
-                    _context.Chats.RemoveRange(acc.Chats);
+                    while(acc.Chats.Count > 0)
+                    {
+                        await _chatService.DeleteChat(acc.Chats.First().Id);
+                    }
                     _context.Accounts.Remove(acc);
                     await _context.SaveChangesAsync();
                     response.Data = true;
@@ -195,7 +238,63 @@ namespace DtuChatBot.Services.AccountServices
             var response = new ServiceResponse<List<GetAccountDto>>();
             try
             {
-                var accs = await _context.Accounts.Where(a => a.RoleId == (int)RoleEnum.Guest).Select(a => _mapper.Map<GetAccountDto>(a)).ToListAsync();
+                var accs = await _context.Accounts.Where(a => a.RoleId == (int)RoleEnum.User).Select(a => _mapper.Map<GetAccountDto>(a)).ToListAsync();
+
+                if (accs != null)
+                {
+                    response.Data = accs;
+                    response.Success = true;
+                }
+                else
+                {
+                    response.Data = null;
+                    response.Success = false;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<ActionResult<ServiceResponse<List<GetAccountDto>>>> GetAllAdminAccount()
+        {
+            var response = new ServiceResponse<List<GetAccountDto>>();
+            try
+            {
+                var accs = await _context.Accounts.Where(a => a.RoleId == (int)RoleEnum.Admin).Select(a => _mapper.Map<GetAccountDto>(a)).ToListAsync();
+
+                if (accs != null)
+                {
+                    response.Data = accs;
+                    response.Success = true;
+                }
+                else
+                {
+                    response.Data = null;
+                    response.Success = false;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<ActionResult<ServiceResponse<List<GetAccountDto>>>> GetUserAndAdminAccounts()
+        {
+            var response = new ServiceResponse<List<GetAccountDto>>();
+            try
+            {
+                var accs = await _context.Accounts.Where(a => a.RoleId == (int)RoleEnum.Admin || a.RoleId == (int)RoleEnum.User).Select(a => _mapper.Map<GetAccountDto>(a)).ToListAsync();
 
                 if (accs != null)
                 {

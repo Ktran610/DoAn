@@ -48,7 +48,14 @@ function Login() {
         if (finalResult.data != null) {
           SetStorage(finalResult.data);
           localStorage.setItem('isGuestUser', false)
-          navigate("/");
+          console.log("RoleId:", localStorage.getItem("RoleId"))
+          console.log("Compare:", localStorage.getItem("RoleId") == 0)
+          if(localStorage.getItem("RoleId") == 0){
+            navigate("/Admin")
+          }
+          else{
+            navigate("/");
+          }
         }
       })
       .catch((error) => {
