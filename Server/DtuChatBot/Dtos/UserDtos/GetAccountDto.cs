@@ -15,6 +15,7 @@ namespace DtuChatBot.Dtos.UserDtos
 
         public int RoleId { get; set; }
 
+        public string? RoleName { get; set; }
 
         public virtual ICollection<Chat> Chats { get; set; } = new List<Chat>();
     }

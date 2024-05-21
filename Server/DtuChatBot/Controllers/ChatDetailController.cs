@@ -29,6 +29,12 @@ namespace DtuChatBot.Controllers
             return Ok(await _chatDetailService.GetChatDetailsByChatId(id));
         }
 
+        [HttpGet("getallchatdetails")]
+        public async Task<ActionResult<ServiceResponse<List<GetChatDetailDto>>>> GetAllChatDetais()
+        {
+            return Ok(await _chatDetailService.GetAllChatDetails());
+        }
+
         /*[HttpPost(Name = "FakeApi")]
         public async Task<ActionResult<string>> FakeApi(string fe)
         {

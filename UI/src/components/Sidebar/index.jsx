@@ -49,6 +49,7 @@ const SideBar = () => {
   const [flag, setFlag] = useState(false);
   const [isShowPopupSetting, setIsShowPopupSetting] = useState(false);
   const [isModalEditSetting, setIsModalEditSetting] = useState(false);
+  let navigate = useNavigate();
   
 
   useEffect(() => {
@@ -126,6 +127,20 @@ const SideBar = () => {
     setIsModalEditSetting(!isModalEditSetting)
   }
 
+  function removeUserStorage(data) {
+    localStorage.removeItem("UserId");
+    localStorage.removeItem("UserName");
+    localStorage.removeItem("RoleId");
+    localStorage.removeItem("Age");
+    localStorage.removeItem("Email");
+    localStorage.removeItem("chats");
+  }
+
+  const handleLogout = () => {
+    removeUserStorage()
+    navigate("/Login")
+  }
+
   return (
     <div>
       <div id="sidebar" className="sidebar">
@@ -161,13 +176,13 @@ const SideBar = () => {
         </ul>
         <a href="#!" className="account" onClick={() => { setIsShowPopupSetting(!isShowPopupSetting) }}>
           <img src={avatar} alt="account" />
-          <span>Drake Do</span>
+          <span>{localStorage.getItem("UserName")}</span>
         </a> 
         {
           isShowPopupSetting && <div className="popup-setting">
-            <div className="bnt-setting bnt-gmail-text">gamil@gmail.com</div>
+            <div className="bnt-setting bnt-gmail-text">{localStorage.getItem("Email")}</div>
             <Button type="primary" className="bnt-setting" onClick={handleCancelSetting}>Thay đổi thông tin</Button>
-            <Button type="primary" className="bnt-setting">Đăng xuất</Button>
+            <Button type="primary" className="bnt-setting" onClick={handleLogout}>Đăng xuất</Button>
           </div>
         }
         <Modal title="Setting" open={isModalEditSetting} onOk={handleCancelSetting} onCancel={handleCancelSetting}>

@@ -9,6 +9,7 @@
         public string? Answer { get; set; }
 
         public long? CreatedTime { get; set; }
+        public string? Report { get; set; }
 
         public string ChatId { get; set; } = null!;
     }

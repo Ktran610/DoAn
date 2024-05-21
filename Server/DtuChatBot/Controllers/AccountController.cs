@@ -31,13 +31,13 @@ namespace DtuChatBot.Controllers
         }
 
         [HttpGet("GetAllUserAccount")]
-        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> GetAllUserAccount()
+        public async Task<ActionResult<ServiceResponse<List<GetAccountDto>>>> GetAllUserAccount()
         {
             return Ok(await _accountService.GetAllUserAccount());
         }
 
         [HttpGet("GetAllAdminAccount")]
-        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> GetAllAdminAccount()
+        public async Task<ActionResult<ServiceResponse<List<GetAccountDto>>>> GetAllAdminAccount()
         {
             return Ok(await _accountService.GetAllAdminAccount());
         }
@@ -67,7 +67,7 @@ namespace DtuChatBot.Controllers
         }
 
         [HttpDelete("DeleteAccount")]
-        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> DeleteAccount(string id)
+        public async Task<ActionResult<ServiceResponse<List<GetAccountDto>>>> DeleteAccount(string id)
         {
             return Ok(await _accountService.DeleteAccount(id));
         }

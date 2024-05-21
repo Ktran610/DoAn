@@ -12,7 +12,8 @@ namespace DtuChatBot
         {
             CreateMap<CreateUserModel, Account>()
                 .ForMember(des => des.Id, source => source.MapFrom(src => Guid.NewGuid().ToString()));
-            CreateMap<Account, GetAccountDto>();
+            CreateMap<Account, GetAccountDto>()
+                .ForMember(des => des.RoleName, source => source.MapFrom(src => (RoleEnum)src.RoleId));
 
 
             CreateMap<CreateChatDetailDto, ChatDetail>()

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dropdown,
   Flex,
@@ -10,6 +10,7 @@ import {
   Tag,
   Typography
 } from "antd";
+import { httpClient } from "../../../api";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function Response() {
@@ -30,6 +31,21 @@ export default function Response() {
       return data.filter((d) => d.status === +value);
     });
   };
+
+  useEffect(() => {
+    httpClient
+      .get("Account/GetAllUserAndAdminAccounts")
+      .then((result) => {
+        console.log("REsult: ", result)
+        let finalResult = result.data.value.data;
+        console.log("Finalreaisdsaf: ", finalResult)
+        setData(finalResult);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    //
+  }, []);
 
   const columns = [
     {

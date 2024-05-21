@@ -4,12 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import dtu_logo from "../../assets/img/dtu_logo.png";
 import { httpClient } from "../../api";
-import { Button } from "antd";
+import { Button, message } from "antd";
 
 function SetStorage(data) {
   localStorage.setItem("UserId", data.id);
   localStorage.setItem("UserName", data.userName);
   localStorage.setItem("RoleId", data.roleId);
+  localStorage.setItem("Email", data.email);
+  localStorage.setItem("Age", data.age);
 
   let chats = data.chats.map((value) => {
     return {
@@ -44,7 +46,11 @@ function Login() {
         setIsLoading(true);
         let finalResult = result.data.value;
         console.log("FinalResult", finalResult.message);
-        alert(finalResult.message);
+        if (finalResult.data == null) {
+          message.error(finalResult.message);
+        } else {
+          message.success(finalResult.message);
+        }
         if (finalResult.data != null) {
           SetStorage(finalResult.data);
           localStorage.setItem('isGuestUser', false)
@@ -87,7 +93,7 @@ function Login() {
         setIsLoading(true);
         let finalResult = result.data.value;
         console.log("FinalResultGuest", finalResult.data);
-        alert(finalResult.message);
+        message.success(finalResult.message);
         if (finalResult.data != null) {
           SetStorage(finalResult.data);
           localStorage.setItem('isGuestUser', true)

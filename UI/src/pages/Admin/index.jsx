@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import bot_icon from "../../assets/img/bot.png";
 import user_icon from "../../assets/img/user.png";
 import dtu_logo from "../../assets/img/dtu_logo.png";
@@ -8,24 +8,49 @@ import { useState } from "react";
 import axios from "axios";
 import api from "../../api";
 import { useLocation } from "react-router-dom"
+import { httpClient } from "../../api";
 import { Table, Modal, Button, Flex, Input, Typography } from 'antd';
 const Admin = () => {
     const [isModalEditOpen, setIsModalEditOpen] = useState(false);
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
     const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+    const [data, setData] = useState();
+
+    useEffect(() => {
+        httpClient
+          .get("Account/GetAllUserAndAdminAccounts")
+          .then((result) => {
+            console.log("REsult: ", result)
+            let finalResult = result.data.value.data;
+            console.log("Finalreaisdsaf: ", finalResult)
+            setData(finalResult);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        //
+      }, []);
     
     const columns = [
         {
           title: 'Name',
-          dataIndex: 'name',
+          dataIndex: 'userName',
         },
         {
           title: 'Age',
           dataIndex: 'age',
         },
         {
-          title: 'Address',
-          dataIndex: 'address',
+          title: 'Email',
+          dataIndex: 'email',
+        },
+        {
+          title: 'PhoneNumber',
+          dataIndex: 'phoneNumber',
+        },
+        {
+          title: 'Role',
+          dataIndex: 'roleName',
         },
         {
             title: 'Action',
@@ -33,22 +58,22 @@ const Admin = () => {
             dataIndex: 'action',
             render: (_, { tags }) => (
               <>
-                <Button type="primary" style={{marginRight: 10}} onClick={() => showModalEdit()}>Chỉnh sửa</Button>
+                {/* <Button type="primary" style={{marginRight: 10}} onClick={() => showModalEdit()}>Chỉnh sửa</Button> */}
                 <Button type="primary" danger onClick={() => showModalDelete()}>Xóa</Button>
               </>
             ),
           },
       ];
     
-    const data = [];
-    for (let i = 0; i < 46; i++) {
-      data.push({
-        key: i,
-        name: `Edward King ${i}`,
-        age: 32,
-        address: `London, Park Lane no. ${i}`,
-      });
-    }
+    // const data = [];
+    // for (let i = 0; i < 46; i++) {
+    //   data.push({
+    //     key: i,
+    //     name: `Edward King ${i}`,
+    //     age: 32,
+    //     address: `London, Park Lane no. ${i}`,
+    //   });
+    // }
     
     const showModalEdit = () => {
         setIsModalEditOpen(true);
@@ -64,6 +89,16 @@ const Admin = () => {
     };
     const deleteMember = () => {
         //call API delete 
+        httpClient
+          .get("Account/GetAllUserAndAdminAccounts")
+          .then((result) => {
+            console.log("REsult: ", result)
+            let finalResult = result.data.value.data;
+            console.log("Finalreaisdsaf: ", finalResult)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
         setIsModalDeleteOpen(false)
     }
     const addMember = () => {
@@ -95,7 +130,7 @@ const Admin = () => {
                     </main>
                 </div>
             </div>
-            <Modal title="Chỉnh sửa" open={isModalEditOpen} onOk={handleOk} onCancel={handleCancel}>
+            {/* <Modal title="Chỉnh sửa" open={isModalEditOpen} onOk={handleOk} onCancel={handleCancel}>
                 <div style={{padding: 20}}>
                     <div>
                         <Typography.Title level={5}>Name</Typography.Title>
@@ -106,11 +141,11 @@ const Admin = () => {
                         <Input defaultValue="" />
                     </div>
                     <div>
-                        <Typography.Title level={5}>Address</Typography.Title>
+                        <Typography.Title level={5}>PhoneNumber</Typography.Title>
                         <Input defaultValue="" />
                     </div>
                 </div>
-            </Modal>
+            </Modal> */}
             <Modal title="Xóa" open={isModalDeleteOpen} onOk={deleteMember} onCancel={() => {setIsModalDeleteOpen(false)}}>
                 <p>Bạn có chắc chắn muốn xóa ?</p>
             </Modal>

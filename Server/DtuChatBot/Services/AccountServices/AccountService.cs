@@ -199,9 +199,9 @@ namespace DtuChatBot.Services.AccountServices
             }
         }
 
-        public async Task<ActionResult<ServiceResponse<bool>>> DeleteAccount(string id)
+        public async Task<ActionResult<ServiceResponse<List<GetAccountDto>>>> DeleteAccount(string id)
         {
-            var response = new ServiceResponse<bool>();
+            var response = new ServiceResponse<List<GetAccountDto>>();
             try
             {
                 var acc = await _context.Accounts.Include(a => a.Chats).FirstOrDefaultAsync(a => a.Id == id);
@@ -214,19 +214,22 @@ namespace DtuChatBot.Services.AccountServices
                     }
                     _context.Accounts.Remove(acc);
                     await _context.SaveChangesAsync();
-                    response.Data = true;
+
+
+                    response.Data = await _context.Accounts.Select(a => _mapper.Map<GetAccountDto>(a)).ToListAsync();
                     response.Success = true;
                 }
                 else
                 {
-                    response.Data = false;
+                    response.Data = null;
                     response.Success = false;
                 }
+                
                 return response;
             }
             catch (Exception ex)
             {
-                response.Data = false;
+                response.Data = null;
                 response.Success = false;
                 response.Message = ex.Message;
                 return response;

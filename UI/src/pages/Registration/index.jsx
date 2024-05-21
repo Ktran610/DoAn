@@ -8,17 +8,18 @@ import { Flex, Input } from "antd";
 
 function Registration() {
   const [name, setName] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
+  const [password, setPassword] = useState("");
   const [address, setAddress] = useState("");
   const [age, setAge] = useState(0);
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const navigate = useNavigate();
 
   const handleNameChange = (value) => {
     setName(value);
   };
-  const handlePhoneNOChange = (value) => {
-    setPhoneNo(value);
+  const handlePasswordChange = (value) => {
+    setPassword(value);
   };
   const handleAddressChange = (value) => {
     setAddress(value);
@@ -29,11 +30,17 @@ function Registration() {
   const handleEmailChange = (value) => {
     setEmail(value);
   };
+  const handlePhoneNumberChange = (value) => {
+    setPhoneNumber(value);
+  };
   const handleSave = () => {
     const data = {
       userName: name,
-      passwordHash: phoneNo,
-      roleId: 0,
+      passwordHash: password,
+      roleId: 1,
+      email: email,
+      age: age,
+      phoneNumber: phoneNumber
     };
     httpClient
       .post("Account/Register", data)
@@ -76,13 +83,11 @@ function Registration() {
             </div>
           </div>
           <div className="group">
-            <Flex>
+            <Flex align="center" gap={16}>
             <i class="fa-regular fa-calendar-days"></i>
             <p>Age</p>
             </Flex>
-            
             <div className="box">
-              
               <input
                 type="number"
                 id="age"
@@ -92,9 +97,11 @@ function Registration() {
             </div>
           </div>
           <div className="group">
+            <Flex align="center" gap={16}>
+            <i class="fa-solid fa-envelope"></i>
             <p>Email</p>
+            </Flex>
             <div className="box">
-              <i class="fa-solid fa-envelope"></i>
               <input
                 type="email"
                 id="email"
@@ -104,21 +111,25 @@ function Registration() {
             </div>
           </div>
           <div className="group">
+            <Flex align="center" gap={16}>
+            <i class="fa-solid fa-lock"></i>
             <p>Password</p>
+            </Flex>
             <div className="box">
-              <i class="fa-solid fa-lock"></i>
               <input
                 type="password"
-                id="txtPhoneNo"
+                id="txtPassword"
                 placeholder="Enter Password"
-                onChange={(e) => handlePhoneNOChange(e.target.value)}
+                onChange={(e) => handlePasswordChange(e.target.value)}
               />
             </div>
           </div>
           <div className="group">
+            <Flex align="center" gap={16}>
+            <i class="fa-solid fa-lock"></i>
             <p>Password</p>
+            </Flex>
             <div className="box">
-              <i class="fa-solid fa-lock"></i>
               <input
                 type="password"
                 id="txtAddress"

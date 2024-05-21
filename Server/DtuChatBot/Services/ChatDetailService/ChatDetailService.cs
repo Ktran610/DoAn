@@ -80,5 +80,32 @@ namespace DtuChatBot.Services.ChatDetailService
                 return response;
             }
         }
+
+        public async Task<ServiceResponse<List<GetChatDetailDto>>> GetAllChatDetails()
+        {
+            var response = new ServiceResponse<List<GetChatDetailDto>>();
+            try
+            {
+                var chatDetails = await _context.ChatDetails.Select(cd => _mapper.Map<GetChatDetailDto>(cd)).ToListAsync();
+                if (chatDetails != null)
+                {
+                    response.Data = chatDetails;
+                    response.Success = true;
+                }
+                else
+                {
+                    response.Data = null;
+                    response.Success = false;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = null;
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
     }
 }
