@@ -6,11 +6,12 @@ import {
 } from "@ant-design/icons";
 import { Flex, Input } from "antd";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { httpClient } from "../../api";
 
 export default function Chat(props) {
   const { request, onDelete, setChatList } = props;
+  const params = useParams();
 
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState("");
@@ -44,8 +45,14 @@ export default function Chat(props) {
   };
 
   return (
-    <li key={request.id}>
-      <Flex justify="space-between">
+    <li
+      style={{
+        background: params.id === request.id ? "rgba(0,0,0,0.08)" : "unset", 
+        borderRadius: 6,
+      }}
+      key={request.id}
+    >
+      <Flex justify="space-between" className="chat-detail-hover">
         {isEditing ? (
           <>
             <Input
@@ -61,6 +68,7 @@ export default function Chat(props) {
                   cursor: "pointer",
                   color: "blue",
                 }}
+                className="icon-hover"
                 onClick={() => handleEdit(request.id)}
               />
             ) : (
@@ -70,24 +78,22 @@ export default function Chat(props) {
         ) : (
           <>
             <Link to={`/chats/${request.id}`}>{request.name}</Link>
-            <Flex gap={16}>
+            <Flex gap={10}>
               <EditOutlined
                 style={{
-                  width: 22,
-                  fontSize: 26,
+                  fontSize: 18,
                   cursor: "pointer",
-                  color: "blue",
                 }}
+                className="icon-hover"
                 onClick={() => setIsEditing(true)}
               />
               <CloseCircleOutlined
                 onClick={() => onDelete(request.id)}
                 style={{
-                  width: 22,
-                  fontSize: 26,
+                  fontSize: 18,
                   cursor: "pointer",
-                  color: "blue",
                 }}
+                className="icon-hover"
               />
             </Flex>
           </>

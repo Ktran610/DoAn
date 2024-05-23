@@ -12,6 +12,7 @@ import Typewriter from "typewriter-effect";
 import { ReactTyped } from "react-typed";
 import { useLocation, useParams } from "react-router-dom";
 import { httpClient } from "../../api";
+import { message } from "antd";
 //import ChatDetailList from "../../components/ChatDetail";
 
 function QuestionAnswer({ request }) {
@@ -57,29 +58,35 @@ const Home = () => {
 
   function handlePostMsg(event) {
     const { key } = event;
-    const { value } = event.target;
-    const tempQuestion = value;
 
     if (key !== "Enter") {
       return;
     }
 
+    if (!valueAnswer.trim()) {
+      message.warning("Please enter question...");
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
     setLoading(true);
-    setValueAnswer("");
     const data = {
-      question: value,
+      question: valueAnswer,
       answer: "...",
       //answer: "hellosd sdfsdf sdafsd fsdafsdf dsafsad dsfasdaf sdafsd"
     };
     createAnswer(data);
-
+    setValueAnswer("");
     api
-      .post("/query?query=" + value)
+      .post("/query?query=" + valueAnswer)
       //.post("/posts")
       .then((res) => {
         console.log({ res });
         const newData = {
-          question: value,
+          question: valueAnswer,
           answer: res.data.response,
           //answer: "hellosd sdfsdf sdafsd fsdafsdf dsafsad dsfasdaf sdafsd"
         };
@@ -87,7 +94,7 @@ const Home = () => {
         UpdateAnswer(newData);
 
         const chatDetailCreate = {
-          question: value,
+          question: valueAnswer,
           answer: res.data.response,
           chatId: id,
         };
@@ -135,7 +142,60 @@ const Home = () => {
           />
           <a className="search-btn" href="#!">
             {/* <i className="fa-solid fa-magnifying-glass" /> */}
-            <Search />
+            <Search
+              onClick={() => {
+                if (!valueAnswer.trim()) {
+                  message.warning("Please enter question...");
+                  return;
+                }
+
+                if (loading) {
+                  return;
+                }
+
+                setLoading(true);
+                const data = {
+                  question: valueAnswer,
+                  answer: "...",
+                  //answer: "hellosd sdfsdf sdafsd fsdafsdf dsafsad dsfasdaf sdafsd"
+                };
+                createAnswer(data);
+                setValueAnswer("");
+                api
+                  .post("/query?query=" + valueAnswer)
+                  //.post("/posts")
+                  .then((res) => {
+                    console.log({ res });
+                    const newData = {
+                      question: valueAnswer,
+                      answer: res.data.response,
+                      //answer: "hellosd sdfsdf sdafsd fsdafsdf dsafsad dsfasdaf sdafsd"
+                    };
+                    console.log("Update answer data:", newData);
+                    UpdateAnswer(newData);
+
+                    const chatDetailCreate = {
+                      question: valueAnswer,
+                      answer: res.data.response,
+                      chatId: id,
+                    };
+                    console.log("ChatDetailCreate", chatDetailCreate);
+                    httpClient
+                      .post("ChatDetail/AddChatDetail", chatDetailCreate)
+                      .then((result) => {
+                        let finalResult = result.data.data;
+                        console.log("FinalResult", finalResult);
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  })
+                  .catch(() => {})
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              }}
+            />
           </a>
         </div>
       </div>

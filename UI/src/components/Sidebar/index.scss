@@ -105,3 +105,22 @@
     border-radius: 4px;
    }
 }
+
+.icon-hover {
+    &:hover {
+        color: #5858bf;
+    }
+}
+
+.chat-detail-hover {
+    padding: 0 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+
+    a:hover {
+        background-color: unset !important;
+    }
+    &:hover {
+        background-color: rgba(0,0,0,0.08);
+    }
+}

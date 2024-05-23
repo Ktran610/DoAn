@@ -3,20 +3,19 @@ import { botIcon, userIcon } from "../../assets/img";
 import { useLocation, useParams } from "react-router-dom";
 import { httpClient } from "../../api";
 import { Skeleton, Tooltip } from "antd";
-import { RedoOutlined, DislikeOutlined } from '@ant-design/icons';
+import { RedoOutlined, DislikeOutlined, LikeOutlined } from "@ant-design/icons";
+import api from "../../api";
+import ChatItem from "./ChatItem";
 
 function ChatDetailList(props) {
   let { chatDetailList, SetChatDetailList, isLoading } = props;
+  console.log({chatDetailList})
   // const [chatDetailList, SetChatDetailList] = useState(props.chatDetailList)
   const location = useLocation();
   const param = useParams();
   const id = param.id;
-  console.log("id", id);
-  console.log("Props: ", { props });
-  console.log("ChatDetailProps: ", chatDetailList);
 
   useEffect(() => {
-    console.log("Change Chat, Send api");
     httpClient
       .get("Chat/GetChatDetailsByChatId?id=" + id)
       .then((result) => {
@@ -26,6 +25,8 @@ function ChatDetailList(props) {
             id: value.id,
             question: value.question,
             answer: value.answer,
+            report: value.report,
+            chatId: value.chatId
           };
         });
         console.log("TempChat:", tempChat);
@@ -67,20 +68,7 @@ function ChatDetailList(props) {
               {isLoading && index === chatDetailList.length - 1 ? (
                 <Skeleton avatar paragraph={{ rows: 4 }} />
               ) : (
-                <div className="box-answer">
-                  <div>
-                    <img src={botIcon} alt="bot" />
-                    <span>{request.answer}</span>
-                  </div>
-                  <div>
-                    <Tooltip title="Regenerate">
-                      <RedoOutlined className="icon-refresh"/>
-                    </Tooltip>
-                    <Tooltip title="Dislike">
-                        <DislikeOutlined className="icon-dislike"/>
-                    </Tooltip>
-                  </div>
-                </div>
+               <ChatItem request={request} updateChatDetail={SetChatDetailList}/>
               )}
             </div>
           </div>

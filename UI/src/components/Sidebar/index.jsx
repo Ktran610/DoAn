@@ -8,12 +8,11 @@ import dataSidebar from "../../data/dataSidebar";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { httpClient } from "../../api";
 import { EditOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Button, Flex, Input, Modal, Typography } from "antd";
+import { Button, Flex, Input, Modal, Skeleton, Typography } from "antd";
 import Chat from "./Chat";
 
 function ChatList(props) {
-  const { chatList, setChatList } = props;
-
+  const { chatList, setChatList, isFetching } = props;
 
   const handleDelete = (questionId) => {
     setChatList((prev) => prev.filter((chat) => chat.id !== questionId));
@@ -29,13 +28,22 @@ function ChatList(props) {
       });
   };
 
- 
+  if (isFetching) {
+    return <Skeleton />;
+  }
+
+  console.log({chatList})
 
   return (
     <div>
       {chatList.length ? (
         chatList.map((request) => (
-         <Chat request={request} onDelete={handleDelete} setChatList={setChatList}/>
+          <Chat
+            id={request.id}
+            request={request}
+            onDelete={handleDelete}
+            setChatList={setChatList}
+          />
         ))
       ) : (
         <div></div>
@@ -45,17 +53,18 @@ function ChatList(props) {
 }
 
 const SideBar = () => {
-  const [history, setHistory] = useState(dataSidebar);
+  const [history, setHistory] = useState([]);
   const [flag, setFlag] = useState(false);
   const [isShowPopupSetting, setIsShowPopupSetting] = useState(false);
   const [isModalEditSetting, setIsModalEditSetting] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   let navigate = useNavigate();
-  
 
   useEffect(() => {
     let request = localStorage.getItem("UserId");
     console.log("AccountId", request);
     if (request == null) return;
+    setIsFetching(true);
     httpClient
       .get("Chat/GetChatsByAccountId?id=" + request)
       .then((result) => {
@@ -73,6 +82,9 @@ const SideBar = () => {
       })
       .catch((error) => {
         alert(error);
+      })
+      .finally(() => {
+        setIsFetching(false);
       });
   }, []);
 
@@ -124,8 +136,8 @@ const SideBar = () => {
     }
   }
   const handleCancelSetting = () => {
-    setIsModalEditSetting(!isModalEditSetting)
-  }
+    setIsModalEditSetting(!isModalEditSetting);
+  };
 
   function removeUserStorage(data) {
     localStorage.removeItem("UserId");
@@ -137,9 +149,9 @@ const SideBar = () => {
   }
 
   const handleLogout = () => {
-    removeUserStorage()
-    navigate("/Login")
-  }
+    removeUserStorage();
+    navigate("/Login");
+  };
 
   return (
     <div>
@@ -172,34 +184,64 @@ const SideBar = () => {
             // );
             return <ChatList chatList={value} />;
           })} */}
-          <ChatList chatList={history} setChatList={setHistory} />
+          <ChatList
+            chatList={history}
+            setChatList={setHistory}
+            isFetching={isFetching}
+          />
         </ul>
-        <a href="#!" className="account" onClick={() => { setIsShowPopupSetting(!isShowPopupSetting) }}>
+        <a
+          href="#!"
+          className="account"
+          onClick={() => {
+            setIsShowPopupSetting(!isShowPopupSetting);
+          }}
+        >
           <img src={avatar} alt="account" />
           <span>{localStorage.getItem("UserName")}</span>
-        </a> 
-        {
-          isShowPopupSetting && <div className="popup-setting">
-            <div className="bnt-setting bnt-gmail-text">{localStorage.getItem("Email")}</div>
-            <Button type="primary" className="bnt-setting" onClick={handleCancelSetting}>Thay đổi thông tin</Button>
-            <Button type="primary" className="bnt-setting" onClick={handleLogout}>Đăng xuất</Button>
+        </a>
+        {isShowPopupSetting && (
+          <div className="popup-setting">
+            <div className="bnt-setting bnt-gmail-text">
+              {localStorage.getItem("Email")}
+            </div>
+
+            <Button
+              type="primary"
+              className="bnt-setting"
+              onClick={handleCancelSetting}
+            >
+              Thay đổi thông tin
+            </Button>
+            <Button
+              type="primary"
+              className="bnt-setting"
+              onClick={handleLogout}
+            >
+              Đăng xuất
+            </Button>
           </div>
-        }
-        <Modal title="Setting" open={isModalEditSetting} onOk={handleCancelSetting} onCancel={handleCancelSetting}>
-                <div style={{padding: 10}}>
-                    <div>
-                        <Typography.Title level={5}>Name</Typography.Title>
-                        <Input defaultValue="" />
-                    </div>
-                    <div>
-                        <Typography.Title level={5}>Age</Typography.Title>
-                        <Input defaultValue="" />
-                    </div>
-                    <div>
-                        <Typography.Title level={5}>Address</Typography.Title>
-                        <Input defaultValue="" />
-                    </div>
-                </div>
+        )}
+        <Modal
+          title="Setting"
+          open={isModalEditSetting}
+          onOk={handleCancelSetting}
+          onCancel={handleCancelSetting}
+        >
+          <div style={{ padding: 10 }}>
+            <div>
+              <Typography.Title level={5}>Name</Typography.Title>
+              <Input defaultValue="" />
+            </div>
+            <div>
+              <Typography.Title level={5}>Age</Typography.Title>
+              <Input defaultValue="" />
+            </div>
+            <div>
+              <Typography.Title level={5}>Address</Typography.Title>
+              <Input defaultValue="" />
+            </div>
+          </div>
         </Modal>
       </div>
     </div>

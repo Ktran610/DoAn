@@ -8,7 +8,8 @@ import {
   Space,
   Table,
   Tag,
-  Typography
+  Typography,
+  Tooltip,
 } from "antd";
 import { httpClient } from "../../../api";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -25,7 +26,7 @@ export default function Response() {
     console.log("🚀 ~ handleChange ~ value:", value);
     setDataFilter(() => {
       if (+value === 2) {
-        console.log("🚀 ~ setDataFilter ~ data:", data)
+        console.log("🚀 ~ setDataFilter ~ data:", data);
         return data;
       }
       return data.filter((d) => d.status === +value);
@@ -36,9 +37,9 @@ export default function Response() {
     httpClient
       .get("Account/GetAllUserAndAdminAccounts")
       .then((result) => {
-        console.log("REsult: ", result)
+        console.log("REsult: ", result);
         let finalResult = result.data.value.data;
-        console.log("Finalreaisdsaf: ", finalResult)
+        console.log("Finalreaisdsaf: ", finalResult);
         setData(finalResult);
       })
       .catch((error) => {
@@ -49,30 +50,20 @@ export default function Response() {
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text, record) => (
-        <Space size="middle">
-          <a
-            className="aTagAntd"
-            style={{ color: "blue" }}
-            onClick={() => handleNameClick(record)}
-          >
-            {text}
-          </a>
-        </Space>
-      )
-    },
-    {
       title: "Question",
       dataIndex: "question",
       key: "question",
       render: (text) => (
         <Space size="middle">
-          <a>{text || "-"}</a>
+           <Typography.Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: "collapsible",
+            }}
+          >{text || "-"} </Typography.Paragraph>
         </Space>
-      )
+      ),
+      width: "30%",
     },
     {
       title: "Answer",
@@ -80,9 +71,17 @@ export default function Response() {
       key: "answer",
       render: (text) => (
         <Space size="middle">
-          <a>{text || "-"}</a>
+          <Typography.Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: "collapsible",
+            }}
+          >
+            {text || "-"}
+          </Typography.Paragraph>
         </Space>
-      )
+      ),
+      width: "60%",
     },
     {
       title: "Status",
@@ -90,13 +89,15 @@ export default function Response() {
       dataIndex: "status",
       render: (_, { status }) => (
         <Tag color={status ? "green" : "volcano"}>
-          {status ? "Good" : "Bad"}
+          {status ? "No response" : "Bad"}
         </Tag>
-      )
+      ),
+      width: "5%",
     },
     {
       title: "Action",
       key: "action",
+      width: "5%",
       render: (_, record) => (
         <Space size="middle">
           <Popconfirm
@@ -111,8 +112,8 @@ export default function Response() {
           </Popconfirm>
           <EditOutlined className="hover:text-emerald-700" />
         </Space>
-      )
-    }
+      ),
+    },
   ];
 
   const data = [
@@ -120,23 +121,24 @@ export default function Response() {
       key: "1",
       name: "John Brown",
       question: "Bạn có ngu ko?",
-      answer: "Không",
-      status: 0
+      answer:
+        " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam facilis officiis eum consequatur. Aliquam itaque ratione mollitia harum possimus. Iure perferendis quibusdam dolorem voluptas alias commodi aperiam dolorum fuga sunt?Aspernatur, obcaecati! Placeat, odio optio cupiditate reiciendis ut amet hic a omnis odit molestiae? Facere, incidunt consectetur sint, voluptatum hic veritatis dignissimos nulla at non ab nesciunt odit! Quisquam, id?Culpa consequuntur sed, excepturi assumenda enim eos iste pariatur doloribus praesentium maiores quasi sunt fugiat? Magnam ut sapiente pariatur, blanditiis quibusdam earum. Amet incidunt quae tenetur optio nesciunt ut. Rem!Commodi nobis enim veritatis culpa maiores fugit ut! Ipsa praesentium dolores nemo nulla molestiae eaque odit rem neque deserunt dolorem, eveniet vero voluptates unde cum magni excepturi! Impedit, pariatur dolore?Magni neque deleniti officia! Et inventore placeat ipsa at eaque asperiores aspernatur. Sequi, corporis beatae. Officiis voluptatibus necessitatibus voluptatum suscipit eveniet, numquam nisi doloribus dolore ipsum ad quibusdam sint blanditiis.",
+      status: 0,
     },
     {
       key: "2",
       name: "Jim Green",
       question: "Bạn có ngu ko?",
       answer: "Có",
-      status: 1
+      status: 1,
     },
     {
       key: "3",
       name: "Joe Black",
       question: "Bạn có ngu ko?",
       answer: "Có",
-      status: 1
-    }
+      status: 1,
+    },
   ];
 
   const [dataFilter, setDataFilter] = useState(data);
@@ -146,7 +148,7 @@ export default function Response() {
       <Title
         style={{
           marginBottom: 48,
-          marginTop: 48
+          marginTop: 48,
         }}
         level={2}
       >
@@ -157,22 +159,22 @@ export default function Response() {
         <Select
           defaultValue="2"
           style={{
-            width: 120
+            width: 120,
           }}
           onChange={handleChange}
           options={[
             {
               value: "2",
-              label: "All"
+              label: "All",
             },
             {
               value: "1",
-              label: "Good"
+              label: "No response",
             },
             {
               value: "0",
-              label: "Bad"
-            }
+              label: "Bad",
+            },
           ]}
         />
       </Space>

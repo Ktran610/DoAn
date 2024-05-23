@@ -1,15 +1,16 @@
 import {
   LaptopOutlined,
+  LogoutOutlined,
   NotificationOutlined,
-  UserOutlined
+  UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Menu } from "antd";
+import { Avatar, Flex, Menu, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Layout(props) {
-  useEffect(() => {}, []);
+  const navigate = useNavigate()
 
   const items1 = ["Accounts", "Response", "Cost"].map((key, index) => ({
     key,
@@ -17,7 +18,7 @@ export default function Layout(props) {
       <Link to={index === 0 ? "/admin" : `/admin/${key.toLowerCase()}`}>
         {key}
       </Link>
-    )
+    ),
   }));
 
   return (
@@ -26,7 +27,7 @@ export default function Layout(props) {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between"
+          justifyContent: "space-between",
         }}
       >
         <div className="demo-logo" />
@@ -37,7 +38,7 @@ export default function Layout(props) {
           items={items1}
           style={{
             flex: 1,
-            minWidth: 0
+            minWidth: 0,
           }}
         />
         <Menu
@@ -46,8 +47,24 @@ export default function Layout(props) {
           items={[
             {
               key: 1,
-              label: <Avatar icon={<UserOutlined />} />
-            }
+              label: <Avatar icon={<UserOutlined />} />,
+              children: [
+                {
+                  label: (
+                    <Flex
+                      onClick={() => {
+                        localStorage.clear();
+                        navigate("/login")
+                      }}
+                      gap={12}
+                    >
+                      <LogoutOutlined /> <Space>Sign out</Space>
+                    </Flex>
+                  ),
+                  key: "setting:1",
+                },
+              ],
+            },
           ]}
         />
       </Header>
