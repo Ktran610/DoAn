@@ -4,7 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import "./index.scss";
 import dtu_logo from "../../assets/img/dtu_logo.png";
 import { httpClient } from "../../api";
-import { Button, message } from "antd";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  LockOutlined,
+  UserOutlined
+} from "@ant-design/icons";
+import { Button, Flex, Input, message } from "antd";
+import { LoginImg } from "../../assets/img";
 
 function SetStorage(data) {
   localStorage.setItem("UserId", data.id);
@@ -16,7 +23,7 @@ function SetStorage(data) {
   let chats = data.chats.map((value) => {
     return {
       id: value.id,
-      name: value.name,
+      name: value.name
     };
   });
 
@@ -24,6 +31,7 @@ function SetStorage(data) {
 }
 
 function Login() {
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [name, setName] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +45,7 @@ function Login() {
   const handleLogin = () => {
     const data = {
       UserName: name,
-      PasswordHash: phoneNo,
+      PasswordHash: phoneNo
     };
 
     httpClient
@@ -53,13 +61,12 @@ function Login() {
         }
         if (finalResult.data != null) {
           SetStorage(finalResult.data);
-          localStorage.setItem('isGuestUser', false)
-          console.log("RoleId:", localStorage.getItem("RoleId"))
-          console.log("Compare:", localStorage.getItem("RoleId") == 0)
-          if(localStorage.getItem("RoleId") == 0){
-            navigate("/Admin")
-          }
-          else{
+          localStorage.setItem("isGuestUser", false);
+          console.log("RoleId:", localStorage.getItem("RoleId"));
+          console.log("Compare:", localStorage.getItem("RoleId") == 0);
+          if (localStorage.getItem("RoleId") == 0) {
+            navigate("/Admin");
+          } else {
             navigate("/");
           }
         }
@@ -96,7 +103,7 @@ function Login() {
         message.success(finalResult.message);
         if (finalResult.data != null) {
           SetStorage(finalResult.data);
-          localStorage.setItem('isGuestUser', true)
+          localStorage.setItem("isGuestUser", true);
           navigate("/");
         }
       })
@@ -106,85 +113,127 @@ function Login() {
       .finally(() => {
         setIsLoading(false);
       });
-  }
+  };
   return (
     <Fragment>
       <div className="sign-in-up">
-        <div className="sign-in-up-box">
-          <div className="logo">
-            <img src={dtu_logo} alt="dtu_chatbot" />
-          </div>
-          <div className="logo_responsives">
-            <img src="img/mobile_dtu_logo.png" alt="dtu_chatbot" />
-          </div>
+        <Flex gap={100}>
+          <img
+            style={{
+              width: 556,
+              height: 369
+            }}
+            src={LoginImg}
+            alt=""
+          />
+          <div>
+            <div className="logo">
+              <img
+                style={{
+                  width: 500,
+                  height: 100,
+                  marginBottom: 32
+                }}
+                src={dtu_logo}
+                alt="dtu_chatbot"
+              />
+            </div>
+            <div className="logo_responsives">
+              <img src="img/mobile_dtu_logo.png" alt="dtu_chatbot" />
+            </div>
 
-          <div className="title">ChatDTU Tư Vấn Tuyển Sinh Đại Học Duy Tân</div>
-          <div className="group">
-            <p>Name</p>
-            <div className="box">
-              <i className="fa-solid fa-user-plus"></i>
-              <input
+            <div
+              style={{
+                color: "#f4371a",
+                fontSize: 25,
+                lineHeight: 4,
+                fontWeight: 700
+              }}
+            >
+              ChatDTU Tư Vấn Tuyển Sinh Đại Học Duy Tân
+            </div>
+            <div className="group">
+              <div className="box">
+                {/* <i className="fa-solid fa-user-plus"></i> */}
+                <Input
+                  size="large"
+                  placeholder="Enter Name"
+                  prefix={<UserOutlined />}
+                  onChange={(e) => handleNameChange(e.target.value)}
+                />
+                {/* <input
                 type="text"
                 id="txtName"
                 placeholder="Enter Name"
                 onChange={(e) => handleNameChange(e.target.value)}
-              />
+              /> */}
+              </div>
             </div>
-          </div>
-          <div className="group">
-            <p>Password</p>
-            <div className="box">
-              <i class="fa-solid fa-lock"></i>
-              <input
-                type="password"
-                id="txtPhoneNo"
-                placeholder="Enter Password"
-                onChange={(e) => handlePhoneNOChange(e.target.value)}
-              />
+            <div style={{ marginTop: 26, marginBottom: 26 }} className="group">
+              <div className="box">
+                <Input.Password
+                  size="large"
+                  prefix={<LockOutlined />}
+                  id="txtPhoneNo"
+                  placeholder="Enter Password"
+                  iconRender={(visible) =>
+                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                  }
+                  visibilityToggle={{
+                    visible: passwordVisible,
+                    onVisibleChange: setPasswordVisible
+                  }}
+                  onChange={(e) => handlePhoneNOChange(e.target.value)}
+                />
+              </div>
             </div>
-          </div>
-          <a href="#!" class="forgot-passowrd">
-            Quên Mật Khẩu?
-          </a>
-
-          <div class="sign-in-btn-group">
-            <Button
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              loading={isLoading}
-              disabled={isLoading}
-              className="sign-btn"
-              onClick={() => handleLogin()}
-            >
-              Login
-            </Button>
-            {/* <a href="#!" class="sign-btn guest-sign-in-btn">
-              Đăng Nhập Với Tư Cách Khách
+            {/* <a href="#!" class="forgot-passowrd">
+              Quên Mật Khẩu?
             </a> */}
 
-            <Button class="sign-btn guest-sign-in-btn"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              loading={isLoading}
-              disabled={isLoading}
-              className="sign-btn"
-              onClick={() => handleGuestLogin()}
-            >
-              Đăng nhập với Tư Cách Khách
-            </Button>
-          </div>
+            <div>
+              <Button
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                loading={isLoading}
+                disabled={isLoading}
+                className="login-button"
+                onClick={() => handleLogin()}
+              >
+                Login
+              </Button>
 
-          <span class="desc">Bạn chưa có tài khoản? </span>
-          <Link to="/Register" className="sign-link">
-            Đăng Ký
-          </Link>
-        </div>
+              <Button
+                class="sign-btn guest-sign-in-btn"
+                style={{
+                  marginTop: 26,
+                  marginBottom: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                loading={isLoading}
+                disabled={isLoading}
+                className="login-button-guest"
+                onClick={() => handleGuestLogin()}
+              >
+                Đăng nhập với Tư Cách Khách
+              </Button>
+            </div>
+
+            <Link href={"/login"}>
+              <a className="login-forgot-pass">Forgot password</a>
+            </Link>
+            <br />
+
+            <Link to="/Register" className="sign-link">
+              <a className="login-forgot-pass">Register</a>
+            </Link>
+          </div>
+        </Flex>
       </div>
     </Fragment>
   );
