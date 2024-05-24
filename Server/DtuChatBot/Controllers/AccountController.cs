@@ -25,7 +25,7 @@ namespace DtuChatBot.Controllers
         }
 
         [HttpPost("CreateAdminAccount")]
-        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> CreateAdminAccount(CreateUserModel newAccount)
+        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> CreateAdminAccount(CreateAdminModel newAccount)
         {
             return Ok(await _accountService.CreateAdminAccount(newAccount));
         }

@@ -15,6 +15,7 @@ import { httpClient } from "../../../api";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function Response() {
+  const [data, setData] = useState([]);
   const { Title } = Typography;
 
   const handleDelete = (record) => {};
@@ -35,10 +36,10 @@ export default function Response() {
 
   useEffect(() => {
     httpClient
-      .get("Account/GetAllUserAndAdminAccounts")
+      .get("ChatDetail/getallchatdetails")
       .then((result) => {
         console.log("REsult: ", result);
-        let finalResult = result.data.value.data;
+        let finalResult = result.data.data;
         console.log("Finalreaisdsaf: ", finalResult);
         setData(finalResult);
       })
@@ -116,30 +117,30 @@ export default function Response() {
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      question: "Bạn có ngu ko?",
-      answer:
-        " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam facilis officiis eum consequatur. Aliquam itaque ratione mollitia harum possimus. Iure perferendis quibusdam dolorem voluptas alias commodi aperiam dolorum fuga sunt?Aspernatur, obcaecati! Placeat, odio optio cupiditate reiciendis ut amet hic a omnis odit molestiae? Facere, incidunt consectetur sint, voluptatum hic veritatis dignissimos nulla at non ab nesciunt odit! Quisquam, id?Culpa consequuntur sed, excepturi assumenda enim eos iste pariatur doloribus praesentium maiores quasi sunt fugiat? Magnam ut sapiente pariatur, blanditiis quibusdam earum. Amet incidunt quae tenetur optio nesciunt ut. Rem!Commodi nobis enim veritatis culpa maiores fugit ut! Ipsa praesentium dolores nemo nulla molestiae eaque odit rem neque deserunt dolorem, eveniet vero voluptates unde cum magni excepturi! Impedit, pariatur dolore?Magni neque deleniti officia! Et inventore placeat ipsa at eaque asperiores aspernatur. Sequi, corporis beatae. Officiis voluptatibus necessitatibus voluptatum suscipit eveniet, numquam nisi doloribus dolore ipsum ad quibusdam sint blanditiis.",
-      status: 0,
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      question: "Bạn có ngu ko?",
-      answer: "Có",
-      status: 1,
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      question: "Bạn có ngu ko?",
-      answer: "Có",
-      status: 1,
-    },
-  ];
+  // const data = [
+  //   {
+  //     key: "1",
+  //     name: "John Brown",
+  //     question: "Bạn có ngu ko?",
+  //     answer:
+  //       " Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quisquam facilis officiis eum consequatur. Aliquam itaque ratione mollitia harum possimus. Iure perferendis quibusdam dolorem voluptas alias commodi aperiam dolorum fuga sunt?Aspernatur, obcaecati! Placeat, odio optio cupiditate reiciendis ut amet hic a omnis odit molestiae? Facere, incidunt consectetur sint, voluptatum hic veritatis dignissimos nulla at non ab nesciunt odit! Quisquam, id?Culpa consequuntur sed, excepturi assumenda enim eos iste pariatur doloribus praesentium maiores quasi sunt fugiat? Magnam ut sapiente pariatur, blanditiis quibusdam earum. Amet incidunt quae tenetur optio nesciunt ut. Rem!Commodi nobis enim veritatis culpa maiores fugit ut! Ipsa praesentium dolores nemo nulla molestiae eaque odit rem neque deserunt dolorem, eveniet vero voluptates unde cum magni excepturi! Impedit, pariatur dolore?Magni neque deleniti officia! Et inventore placeat ipsa at eaque asperiores aspernatur. Sequi, corporis beatae. Officiis voluptatibus necessitatibus voluptatum suscipit eveniet, numquam nisi doloribus dolore ipsum ad quibusdam sint blanditiis.",
+  //     status: 0,
+  //   },
+  //   {
+  //     key: "2",
+  //     name: "Jim Green",
+  //     question: "Bạn có ngu ko?",
+  //     answer: "Có",
+  //     status: 1,
+  //   },
+  //   {
+  //     key: "3",
+  //     name: "Joe Black",
+  //     question: "Bạn có ngu ko?",
+  //     answer: "Có",
+  //     status: 1,
+  //   },
+  // ];
 
   const [dataFilter, setDataFilter] = useState(data);
 

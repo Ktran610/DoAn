@@ -112,6 +112,20 @@ function Registration() {
           </div>
           <div className="group">
             <Flex align="center" gap={16}>
+            <i class="fa-solid fa-envelope"></i>
+            <p>Phone Number</p>
+            </Flex>
+            <div className="box">
+              <input
+                type="text"
+                id="phoneNo"
+                placeholder="Enter Phone Number"
+                onChange={(e) => handlePhoneNumberChange(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="group">
+            <Flex align="center" gap={16}>
             <i class="fa-solid fa-lock"></i>
             <p>Password</p>
             </Flex>

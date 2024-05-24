@@ -96,6 +96,7 @@ const Home = () => {
         const chatDetailCreate = {
           question: valueAnswer,
           answer: res.data.response,
+          report: "1",
           chatId: id,
         };
         console.log("ChatDetailCreate", chatDetailCreate);
@@ -177,6 +178,7 @@ const Home = () => {
                     const chatDetailCreate = {
                       question: valueAnswer,
                       answer: res.data.response,
+                      report: "1",
                       chatId: id,
                     };
                     console.log("ChatDetailCreate", chatDetailCreate);

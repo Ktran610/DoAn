@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 
 export default function ChatItem({ request, updateChatDetail }) {
   const [isReGenerating, setIsReGenerating] = useState(false);
-  const [isDisLiked, setIsDisliked] = useState(false);
+  const [isDisLiked, setIsDisliked] = useState(request.report == 0);
 
   const handleRegenerate = (request) => {
     setIsReGenerating(true);
@@ -27,7 +27,7 @@ export default function ChatItem({ request, updateChatDetail }) {
           question: newQuery,
           answer: res.data.response,
           chatId: request.chatId,
-          report: null,
+          report: "1",
         };
 
         httpClient
@@ -95,14 +95,14 @@ export default function ChatItem({ request, updateChatDetail }) {
         {isDisLiked ? (
           <Tooltip title="UnDisliked">
             <DislikeFilled
-              onClick={() => toggleLiked(null)}
+              onClick={() => toggleLiked("1")}
               style={{ cursor: "pointer" }}
             />
           </Tooltip>
         ) : (
           <Tooltip title="Dislike">
             <DislikeOutlined
-              onClick={() => toggleLiked("Bad")}
+              onClick={() => toggleLiked("0")}
               style={{ cursor: "pointer" }}
               className="icon-dislike"
             />

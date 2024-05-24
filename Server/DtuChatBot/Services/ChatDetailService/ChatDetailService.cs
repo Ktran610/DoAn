@@ -117,12 +117,12 @@ namespace DtuChatBot.Services.ChatDetailService
             }
         }
 
-        public async Task<ServiceResponse<List<GetChatDetailDto>>> GetAllChatDetails()
+        public async Task<ServiceResponse<List<GetChatDetailStatus>>> GetAllChatDetails()
         {
-            var response = new ServiceResponse<List<GetChatDetailDto>>();
+            var response = new ServiceResponse<List<GetChatDetailStatus>>();
             try
             {
-                var chatDetails = await _context.ChatDetails.Select(cd => _mapper.Map<GetChatDetailDto>(cd)).ToListAsync();
+                var chatDetails = await _context.ChatDetails.Select(cd => _mapper.Map<GetChatDetailStatus>(cd)).ToListAsync();
                 if (chatDetails != null)
                 {
                     response.Data = chatDetails;

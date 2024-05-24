@@ -30,7 +30,7 @@ namespace DtuChatBot.Controllers
         }
 
         [HttpGet("getallchatdetails")]
-        public async Task<ActionResult<ServiceResponse<List<GetChatDetailDto>>>> GetAllChatDetais()
+        public async Task<ActionResult<ServiceResponse<List<GetChatDetailStatus>>>> GetAllChatDetais()
         {
             return Ok(await _chatDetailService.GetAllChatDetails());
         }

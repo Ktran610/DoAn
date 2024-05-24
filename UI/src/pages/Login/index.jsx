@@ -8,7 +8,7 @@ import {
   EyeInvisibleOutlined,
   EyeTwoTone,
   LockOutlined,
-  UserOutlined
+  UserOutlined,
 } from "@ant-design/icons";
 import { Button, Flex, Input, message } from "antd";
 import { LoginImg } from "../../assets/img";
@@ -23,7 +23,7 @@ function SetStorage(data) {
   let chats = data.chats.map((value) => {
     return {
       id: value.id,
-      name: value.name
+      name: value.name,
     };
   });
 
@@ -45,7 +45,7 @@ function Login() {
   const handleLogin = () => {
     const data = {
       UserName: name,
-      PasswordHash: phoneNo
+      PasswordHash: phoneNo,
     };
 
     httpClient
@@ -60,13 +60,13 @@ function Login() {
           message.success(finalResult.message);
         }
         if (finalResult.data != null) {
-          SetStorage(finalResult.data);
-          localStorage.setItem("isGuestUser", false);
-          console.log("RoleId:", localStorage.getItem("RoleId"));
-          console.log("Compare:", localStorage.getItem("RoleId") == 0);
-          if (localStorage.getItem("RoleId") == 0) {
+          if (finalResult.data.roleId == 0) {
             navigate("/Admin");
           } else {
+            SetStorage(finalResult.data);
+            localStorage.setItem("isGuestUser", false);
+            console.log("RoleId:", localStorage.getItem("RoleId"));
+            console.log("Compare:", localStorage.getItem("RoleId") == 0);
             navigate("/");
           }
         }
@@ -121,7 +121,7 @@ function Login() {
           <img
             style={{
               width: 556,
-              height: 369
+              height: 369,
             }}
             src={LoginImg}
             alt=""
@@ -132,7 +132,7 @@ function Login() {
                 style={{
                   width: 500,
                   height: 100,
-                  marginBottom: 32
+                  marginBottom: 32,
                 }}
                 src={dtu_logo}
                 alt="dtu_chatbot"
@@ -147,7 +147,7 @@ function Login() {
                 color: "#f4371a",
                 fontSize: 25,
                 lineHeight: 4,
-                fontWeight: 700
+                fontWeight: 700,
               }}
             >
               ChatDTU Tư Vấn Tuyển Sinh Đại Học Duy Tân
@@ -181,7 +181,7 @@ function Login() {
                   }
                   visibilityToggle={{
                     visible: passwordVisible,
-                    onVisibleChange: setPasswordVisible
+                    onVisibleChange: setPasswordVisible,
                   }}
                   onChange={(e) => handlePhoneNOChange(e.target.value)}
                 />
@@ -196,7 +196,7 @@ function Login() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
                 }}
                 loading={isLoading}
                 disabled={isLoading}
@@ -213,7 +213,7 @@ function Login() {
                   marginBottom: 12,
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
                 }}
                 loading={isLoading}
                 disabled={isLoading}
@@ -224,9 +224,9 @@ function Login() {
               </Button>
             </div>
 
-            <Link href={"/login"}>
+            {/* <Link href={"/login"}>
               <a className="login-forgot-pass">Forgot password</a>
-            </Link>
+            </Link> */}
             <br />
 
             <Link to="/Register" className="sign-link">

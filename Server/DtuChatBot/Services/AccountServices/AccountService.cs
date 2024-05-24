@@ -59,7 +59,7 @@ namespace DtuChatBot.Services.AccountServices
             }
         }
 
-        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> CreateAdminAccount(CreateUserModel newAccount)
+        public async Task<ActionResult<ServiceResponse<GetAccountDto>>> CreateAdminAccount(CreateAdminModel newAccount)
         {
             var response = new ServiceResponse<GetAccountDto>();
             try
@@ -176,7 +176,6 @@ namespace DtuChatBot.Services.AccountServices
                 {
                     acc.UserName = request.UserName;
                     acc.PasswordHash = request.PasswordHash;
-                    acc.RoleId = request.RoleId;
                     acc.Age = request.Age;
                     acc.PhoneNumber = request.PhoneNumber;
 
