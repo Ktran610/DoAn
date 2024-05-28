@@ -10,7 +10,7 @@ import {
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Flex, Input, message } from "antd";
+import { Button, Flex, Form, Input, message } from "antd";
 import { LoginImg } from "../../assets/img";
 
 function SetStorage(data) {
@@ -31,22 +31,11 @@ function SetStorage(data) {
 }
 
 function Login() {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   let navigate = useNavigate();
-  const handleNameChange = (value) => {
-    setName(value);
-  };
-  const handlePhoneNOChange = (value) => {
-    setPhoneNo(value);
-  };
-  const handleLogin = () => {
-    const data = {
-      UserName: name,
-      PasswordHash: phoneNo,
-    };
+
+  const handleLogin = (data) => {
+    console.log({ data });
 
     httpClient
       .post("Account/Login", data)
@@ -65,8 +54,6 @@ function Login() {
           } else {
             SetStorage(finalResult.data);
             localStorage.setItem("isGuestUser", false);
-            console.log("RoleId:", localStorage.getItem("RoleId"));
-            console.log("Compare:", localStorage.getItem("RoleId") == 0);
             navigate("/");
           }
         }
@@ -118,14 +105,26 @@ function Login() {
     <Fragment>
       <div className="sign-in-up">
         <Flex gap={100}>
-          <img
-            style={{
-              width: 556,
-              height: 369,
-            }}
-            src={LoginImg}
-            alt=""
-          />
+          <Flex vertical align="center">
+            <div
+              style={{
+                color: "#f4371a",
+                fontSize: 38,
+                lineHeight: 4,
+                fontWeight: 700,
+              }}
+            >
+              Login
+            </div>
+            <img
+              style={{
+                width: 556,
+                height: 369,
+              }}
+              src={LoginImg}
+              alt=""
+            />
+          </Flex>
           <div>
             <div className="logo">
               <img
@@ -150,79 +149,80 @@ function Login() {
                 fontWeight: 700,
               }}
             >
-              ChatDTU Tư Vấn Tuyển Sinh Đại Học Duy Tân
+              Tư Vấn Tuyển Sinh Đại Học Duy Tân
             </div>
-            <div className="group">
-              <div className="box">
-                {/* <i className="fa-solid fa-user-plus"></i> */}
+
+            <Form onFinish={handleLogin}>
+              <Form.Item
+                name="userName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your username!",
+                  },
+                ]}
+              >
                 <Input
                   size="large"
                   placeholder="Enter Name"
                   prefix={<UserOutlined />}
-                  onChange={(e) => handleNameChange(e.target.value)}
                 />
-                {/* <input
-                type="text"
-                id="txtName"
-                placeholder="Enter Name"
-                onChange={(e) => handleNameChange(e.target.value)}
-              /> */}
-              </div>
-            </div>
-            <div style={{ marginTop: 26, marginBottom: 26 }} className="group">
-              <div className="box">
+              </Form.Item>
+
+              <Form.Item
+                style={{ marginBottom: 42, marginTop: 42 }}
+                name="passwordHash"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your password!",
+                  },
+                ]}
+              >
                 <Input.Password
-                  size="large"
-                  prefix={<LockOutlined />}
-                  id="txtPhoneNo"
-                  placeholder="Enter Password"
-                  iconRender={(visible) =>
-                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                  }
-                  visibilityToggle={{
-                    visible: passwordVisible,
-                    onVisibleChange: setPasswordVisible,
+                  style={{
+                    height: 42,
                   }}
-                  onChange={(e) => handlePhoneNOChange(e.target.value)}
+                  prefix={<LockOutlined />}
+                  placeholder="Enter Password"
                 />
+              </Form.Item>
+
+              <div>
+                <Form.Item>
+                  <Button
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    loading={isLoading}
+                    disabled={isLoading}
+                    className="login-button"
+                    htmlType="submit"
+                  >
+                    Login
+                  </Button>
+                </Form.Item>
+
+                <Button
+                  class="sign-btn guest-sign-in-btn"
+                  style={{
+                    marginTop: 26,
+                    marginBottom: 12,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  loading={isLoading}
+                  disabled={isLoading}
+                  className="login-button-guest"
+                  onClick={() => handleGuestLogin()}
+                >
+                  Đăng nhập với Tư Cách Khách
+                </Button>
               </div>
-            </div>
-            {/* <a href="#!" class="forgot-passowrd">
-              Quên Mật Khẩu?
-            </a> */}
-
-            <div>
-              <Button
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                loading={isLoading}
-                disabled={isLoading}
-                className="login-button"
-                onClick={() => handleLogin()}
-              >
-                Login
-              </Button>
-
-              <Button
-                class="sign-btn guest-sign-in-btn"
-                style={{
-                  marginTop: 26,
-                  marginBottom: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                loading={isLoading}
-                disabled={isLoading}
-                className="login-button-guest"
-                onClick={() => handleGuestLogin()}
-              >
-                Đăng nhập với Tư Cách Khách
-              </Button>
-            </div>
+            </Form>
 
             {/* <Link href={"/login"}>
               <a className="login-forgot-pass">Forgot password</a>

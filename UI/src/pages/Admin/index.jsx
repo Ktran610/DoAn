@@ -19,15 +19,21 @@ import {
   Form,
   Popconfirm,
   Space,
+  InputNumber,
+  message,
+  Spin,
 } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 const Admin = () => {
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [isSubmittting, setIsSubmitting] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
+  const fetchTableData = () => {
     httpClient
       .get("Account/GetAllUserAndAdminAccounts")
       .then((result) => {
@@ -38,11 +44,15 @@ const Admin = () => {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsFetching(false);
       });
-    //
-  }, []);
+  };
 
-  console.log({ data });
+  useEffect(() => {
+    fetchTableData();
+  }, []);
 
   const columns = [
     {
@@ -116,57 +126,11 @@ const Admin = () => {
           >
             <DeleteOutlined className="hover:text-emerald-700" />
           </Popconfirm>
-          <EditOutlined className="hover:text-emerald-700" />
+          {/* <EditOutlined className="hover:text-emerald-700" /> */}
         </Space>
       ),
     },
   ];
-
-  const columns2 = [
-    {
-      title: "Name",
-      dataIndex: "userName",
-    },
-    {
-      title: "Age",
-      dataIndex: "age",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-    },
-    {
-      title: "PhoneNumber",
-      dataIndex: "phoneNumber",
-    },
-    {
-      title: "Role",
-      dataIndex: "roleName",
-    },
-    {
-      title: "Action",
-      key: "action",
-      dataIndex: "action",
-      render: (_, { tags }) => (
-        <>
-          {/* <Button type="primary" style={{marginRight: 10}} onClick={() => showModalEdit()}>Chỉnh sửa</Button> */}
-          <Button type="primary" danger onClick={() => showModalDelete()}>
-            Xóa
-          </Button>
-        </>
-      ),
-    },
-  ];
-
-  // const data = [];
-  // for (let i = 0; i < 46; i++) {
-  //   data.push({
-  //     key: i,
-  //     name: `Edward King ${i}`,
-  //     age: 32,
-  //     address: `London, Park Lane no. ${i}`,
-  //   });
-  // }
 
   const showModalEdit = () => {
     setIsModalEditOpen(true);
@@ -201,10 +165,29 @@ const Admin = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    setData((prev) => [...prev, values]);
-    setIsModalAddOpen(false)
-    form.resetFields();
+  const onFinish = (data) => {
+    setIsSubmitting(true);
+    httpClient
+      .post("Account/CreateAdminAccount", data)
+      .then(async (response) => {
+        if (response.data.value.success) {
+          message.success("Create account successfully!");
+          await fetchTableData();
+          await setIsModalAddOpen(false);
+          await form.resetFields();
+        } else {
+          message.warning(response.data.value.message);
+        }
+        console.log({ response: response.data.value.success });
+      })
+      .catch((error) => {
+        message.error(error ?? "");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+    // setIsModalAddOpen(false);
+    // form.resetFields();
   };
 
   return (
@@ -233,7 +216,7 @@ const Admin = () => {
           <main>
             <div class="container-fluid px-4">
               <h1 class="my-4">Quản Lý Tài Khoản Người Dùng</h1>
-              <Table columns={columns} dataSource={data} />
+              {isFetching ? <Spin/> : <Table columns={columns} dataSource={data} />}
             </div>
           </main>
         </div>
@@ -265,7 +248,7 @@ const Admin = () => {
         <p>Bạn có chắc chắn muốn xóa ?</p>
       </Modal>
       <Modal
-        title="Thêm"
+        title="Create New Admin Account"
         open={isModalAddOpen}
         onOk={addMember}
         onCancel={() => {
@@ -275,24 +258,13 @@ const Admin = () => {
       >
         <Form
           form={form}
-          name="basic"
           labelCol={{
-            span: 8,
+            span: 6,
           }}
           wrapperCol={{
-            span: 16,
-          }}
-          style={
-            {
-              // maxWidth: 600,
-            }
-          }
-          initialValues={{
-            remember: true,
+            span: 24,
           }}
           onFinish={onFinish}
-          // onFinishFailed={onFinishFailed}
-          autoComplete="off"
         >
           <Form.Item
             label="Username"
@@ -306,6 +278,47 @@ const Admin = () => {
           >
             <Input />
           </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="passwordHash"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+              {
+                min: 8,
+                message: "Please enter a password of more than 8 characters",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            name="confirm"
+            label="Confirm Password"
+            dependencies={["passwordHash"]}
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: "Please confirm your password!",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("passwordHash") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("The new password that you entered do not match!")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
           <Form.Item
             label="Age"
             name="age"
@@ -314,30 +327,64 @@ const Admin = () => {
                 required: true,
                 message: "Please input your age!",
               },
+              {
+                type: "number",
+                min: 10,
+                max: 100,
+                message: "Enter age from 10 to 100",
+              },
             ]}
           >
-            <Input type="number" />
+            <InputNumber />
           </Form.Item>
           <Form.Item
-            label="Address"
-            name="address"
+            label="Email"
+            name="email"
             rules={[
               {
                 required: true,
-                message: "Please input your address!",
+                message: "Please input your Email!",
+              },
+              {
+                type: "email",
+                message: "Please input valid Email!",
               },
             ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
+            label="Phone Number"
+            name="phoneNumber"
+            rules={[
+              {
+                required: true,
+                message: "Please input your phone number!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
             wrapperCol={{
-              offset: 8,
-              span: 16,
+              offset: 6,
+              span: 18,
             }}
           >
-            <Button type="primary" htmlType="submit">
-              Add
+            <Button
+              loading={isSubmittting}
+              className="login-button"
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              type="primary"
+              htmlType="submit"
+            >
+              Create Admin Account
             </Button>
           </Form.Item>
         </Form>

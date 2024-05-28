@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Layout(props) {
   const navigate = useNavigate()
 
-  const items1 = ["Accounts", "Response", "Cost"].map((key, index) => ({
+  const items1 = ["Accounts", "Response"].map((key, index) => ({
     key,
     label: (
       <Link to={index === 0 ? "/admin" : `/admin/${key.toLowerCase()}`}>
